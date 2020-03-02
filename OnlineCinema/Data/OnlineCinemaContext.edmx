@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OnlineCinemaContext.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="OnlineCinemaContextStoreContainer">
+    <EntitySet Name="SeatsSet" EntityType="OnlineCinemaContext.Store.SeatsSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="HallSet" EntityType="OnlineCinemaContext.Store.HallSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SessionsSet" EntityType="OnlineCinemaContext.Store.SessionsSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MovieSet" EntityType="OnlineCinemaContext.Store.MovieSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TicketsSet" EntityType="OnlineCinemaContext.Store.TicketsSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="SessionsMovie" Association="OnlineCinemaContext.Store.SessionsMovie">
+      <End Role="Sessions" EntitySet="SessionsSet" />
+      <End Role="Movie" EntitySet="MovieSet" />
+    </AssociationSet>
+    <AssociationSet Name="SessionsSeats" Association="OnlineCinemaContext.Store.SessionsSeats">
+      <End Role="Sessions" EntitySet="SessionsSet" />
+      <End Role="Seats" EntitySet="SeatsSet" />
+    </AssociationSet>
+    <AssociationSet Name="HallSessions" Association="OnlineCinemaContext.Store.HallSessions">
+      <End Role="Hall" EntitySet="HallSet" />
+      <End Role="Sessions" EntitySet="SessionsSet" />
+    </AssociationSet>
+    <AssociationSet Name="SessionsTickets" Association="OnlineCinemaContext.Store.SessionsTickets">
+      <End Role="Sessions" EntitySet="SessionsSet" />
+      <End Role="Tickets" EntitySet="TicketsSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="SeatsSet">
+    <Key>
+      <PropertyRef Name="IdSeats" />
+    </Key>
+    <Property Name="IdSeats" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Row" Type="int" Nullable="false" />
+    <Property Name="Col" Type="int" Nullable="false" />
+    <Property Name="Sessions_IdSessions" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HallSet">
+    <Key>
+      <PropertyRef Name="IdHall" />
+    </Key>
+    <Property Name="IdHall" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NameHall" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SessionsSet">
+    <Key>
+      <PropertyRef Name="IdSessions" />
+    </Key>
+    <Property Name="IdSessions" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Data" Type="datetime" Nullable="false" />
+    <Property Name="Time" Type="time" Nullable="false" Precision="7" />
+    <Property Name="Movie_IdMovie" Type="int" Nullable="false" />
+    <Property Name="Hall_IdHall" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MovieSet">
+    <Key>
+      <PropertyRef Name="IdMovie" />
+    </Key>
+    <Property Name="IdMovie" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Duration" Type="time" Nullable="false" Precision="7" />
+    <Property Name="SmallImg" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BigImg" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Assessment" Type="int" Nullable="false" />
+    <Property Name="StartOfRental" Type="datetime" Nullable="false" />
+    <Property Name="AgeRestriction" Type="int" Nullable="false" />
+    <Property Name="YearOfIssue" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TicketsSet">
+    <Key>
+      <PropertyRef Name="IdTicket" />
+    </Key>
+    <Property Name="IdTicket" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Data" Type="datetime" Nullable="false" />
+    <Property Name="Time" Type="datetime" Nullable="false" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+    <Property Name="Price" Type="int" Nullable="false" />
+    <Property Name="Sessions_IdSessions" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="SessionsMovie">
+    <End Role="Sessions" Type="OnlineCinemaContext.Store.SessionsSet" Multiplicity="*" />
+    <End Role="Movie" Type="OnlineCinemaContext.Store.MovieSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Movie">
+        <PropertyRef Name="IdMovie" />
+      </Principal>
+      <Dependent Role="Sessions">
+        <PropertyRef Name="Movie_IdMovie" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SessionsSeats">
+    <End Role="Sessions" Type="OnlineCinemaContext.Store.SessionsSet" Multiplicity="1" />
+    <End Role="Seats" Type="OnlineCinemaContext.Store.SeatsSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sessions">
+        <PropertyRef Name="IdSessions" />
+      </Principal>
+      <Dependent Role="Seats">
+        <PropertyRef Name="Sessions_IdSessions" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="HallSessions">
+    <End Role="Hall" Type="OnlineCinemaContext.Store.HallSet" Multiplicity="1" />
+    <End Role="Sessions" Type="OnlineCinemaContext.Store.SessionsSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hall">
+        <PropertyRef Name="IdHall" />
+      </Principal>
+      <Dependent Role="Sessions">
+        <PropertyRef Name="Hall_IdHall" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SessionsTickets">
+    <End Role="Sessions" Type="OnlineCinemaContext.Store.SessionsSet" Multiplicity="1" />
+    <End Role="Tickets" Type="OnlineCinemaContext.Store.TicketsSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sessions">
+        <PropertyRef Name="IdSessions" />
+      </Principal>
+      <Dependent Role="Tickets">
+        <PropertyRef Name="Sessions_IdSessions" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="OnlineCinemaContext" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="OnlineCinemaContextContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SeatsSet" EntityType="OnlineCinemaContext.Seats" />
+          <EntitySet Name="HallSet" EntityType="OnlineCinemaContext.Hall" />
+          <EntitySet Name="SessionsSet" EntityType="OnlineCinemaContext.Sessions" />
+          <EntitySet Name="MovieSet" EntityType="OnlineCinemaContext.Movie" />
+          <EntitySet Name="TicketsSet" EntityType="OnlineCinemaContext.Tickets" />
+          <AssociationSet Name="SessionsMovie" Association="OnlineCinemaContext.SessionsMovie">
+            <End Role="Sessions" EntitySet="SessionsSet" />
+            <End Role="Movie" EntitySet="MovieSet" />
+          </AssociationSet>
+          <AssociationSet Name="SessionsSeats" Association="OnlineCinemaContext.SessionsSeats">
+            <End Role="Sessions" EntitySet="SessionsSet" />
+            <End Role="Seats" EntitySet="SeatsSet" />
+          </AssociationSet>
+          <AssociationSet Name="HallSessions" Association="OnlineCinemaContext.HallSessions">
+            <End Role="Hall" EntitySet="HallSet" />
+            <End Role="Sessions" EntitySet="SessionsSet" />
+          </AssociationSet>
+          <AssociationSet Name="SessionsTickets" Association="OnlineCinemaContext.SessionsTickets">
+            <End Role="Sessions" EntitySet="SessionsSet" />
+            <End Role="Tickets" EntitySet="TicketsSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Seats">
+          <Key>
+            <PropertyRef Name="IdSeats" />
+          </Key>
+          <Property Name="IdSeats" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Row" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Sessions" Relationship="OnlineCinemaContext.SessionsSeats" FromRole="Seats" ToRole="Sessions" />
+          <Property Name="Col" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Hall">
+          <Key>
+            <PropertyRef Name="IdHall" />
+          </Key>
+          <Property Name="IdHall" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameHall" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Sessions" Relationship="OnlineCinemaContext.HallSessions" FromRole="Hall" ToRole="Sessions" />
+        </EntityType>
+        <EntityType Name="Sessions">
+          <Key>
+            <PropertyRef Name="IdSessions" />
+          </Key>
+          <Property Name="IdSessions" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Movie" Relationship="OnlineCinemaContext.SessionsMovie" FromRole="Sessions" ToRole="Movie" />
+          <Property Name="Time" Type="Time" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Seats" Relationship="OnlineCinemaContext.SessionsSeats" FromRole="Sessions" ToRole="Seats" />
+          <NavigationProperty Name="Hall" Relationship="OnlineCinemaContext.HallSessions" FromRole="Sessions" ToRole="Hall" />
+          <NavigationProperty Name="Tickets" Relationship="OnlineCinemaContext.SessionsTickets" FromRole="Sessions" ToRole="Tickets" />
+        </EntityType>
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="IdMovie" />
+          </Key>
+          <Property Name="IdMovie" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Duration" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="SmallImg" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BigImg" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Assessment" Type="Int32" Nullable="false" />
+          <Property Name="StartOfRental" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AgeRestriction" Type="Int32" Nullable="false" />
+          <Property Name="YearOfIssue" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Sessions" Relationship="OnlineCinemaContext.SessionsMovie" FromRole="Movie" ToRole="Sessions" />
+        </EntityType>
+        <EntityType Name="Tickets">
+          <Key>
+            <PropertyRef Name="IdTicket" />
+          </Key>
+          <Property Name="IdTicket" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Data" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Sessions" Relationship="OnlineCinemaContext.SessionsTickets" FromRole="Tickets" ToRole="Sessions" />
+          <Property Name="Price" Type="Int32" Nullable="false" />
+          </EntityType>
+        <Association Name="SessionsMovie">
+          <End Type="OnlineCinemaContext.Sessions" Role="Sessions" Multiplicity="*" />
+          <End Type="OnlineCinemaContext.Movie" Role="Movie" Multiplicity="1" />
+        </Association>
+        <Association Name="SessionsSeats">
+          <End Type="OnlineCinemaContext.Sessions" Role="Sessions" Multiplicity="1" />
+          <End Type="OnlineCinemaContext.Seats" Role="Seats" Multiplicity="*" />
+        </Association>
+        <Association Name="HallSessions">
+          <End Type="OnlineCinemaContext.Hall" Role="Hall" Multiplicity="1" />
+          <End Type="OnlineCinemaContext.Sessions" Role="Sessions" Multiplicity="*" />
+        </Association>
+        <Association Name="SessionsTickets">
+          <End Type="OnlineCinemaContext.Sessions" Role="Sessions" Multiplicity="1" />
+          <End Type="OnlineCinemaContext.Tickets" Role="Tickets" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="OnlineCinemaContextStoreContainer" CdmEntityContainer="OnlineCinemaContextContainer">
+    <EntitySetMapping Name="SeatsSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OnlineCinemaContext.Seats)">
+        <MappingFragment StoreEntitySet="SeatsSet">
+          <ScalarProperty Name="IdSeats" ColumnName="IdSeats" />
+          <ScalarProperty Name="Row" ColumnName="Row" />
+          <ScalarProperty Name="Col" ColumnName="Col" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HallSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OnlineCinemaContext.Hall)">
+        <MappingFragment StoreEntitySet="HallSet">
+          <ScalarProperty Name="IdHall" ColumnName="IdHall" />
+          <ScalarProperty Name="NameHall" ColumnName="NameHall" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SessionsSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OnlineCinemaContext.Sessions)">
+        <MappingFragment StoreEntitySet="SessionsSet">
+          <ScalarProperty Name="IdSessions" ColumnName="IdSessions" />
+          <ScalarProperty Name="Data" ColumnName="Data" />
+          <ScalarProperty Name="Time" ColumnName="Time" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MovieSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OnlineCinemaContext.Movie)">
+        <MappingFragment StoreEntitySet="MovieSet">
+          <ScalarProperty Name="IdMovie" ColumnName="IdMovie" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+          <ScalarProperty Name="SmallImg" ColumnName="SmallImg" />
+          <ScalarProperty Name="BigImg" ColumnName="BigImg" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Assessment" ColumnName="Assessment" />
+          <ScalarProperty Name="StartOfRental" ColumnName="StartOfRental" />
+          <ScalarProperty Name="AgeRestriction" ColumnName="AgeRestriction" />
+          <ScalarProperty Name="YearOfIssue" ColumnName="YearOfIssue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TicketsSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OnlineCinemaContext.Tickets)">
+        <MappingFragment StoreEntitySet="TicketsSet">
+          <ScalarProperty Name="IdTicket" ColumnName="IdTicket" />
+          <ScalarProperty Name="Data" ColumnName="Data" />
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="SessionsMovie" TypeName="OnlineCinemaContext.SessionsMovie" StoreEntitySet="SessionsSet">
+      <EndProperty Name="Movie">
+        <ScalarProperty Name="IdMovie" ColumnName="Movie_IdMovie" />
+      </EndProperty>
+      <EndProperty Name="Sessions">
+        <ScalarProperty Name="IdSessions" ColumnName="IdSessions" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SessionsSeats" TypeName="OnlineCinemaContext.SessionsSeats" StoreEntitySet="SeatsSet">
+      <EndProperty Name="Sessions">
+        <ScalarProperty Name="IdSessions" ColumnName="Sessions_IdSessions" />
+      </EndProperty>
+      <EndProperty Name="Seats">
+        <ScalarProperty Name="IdSeats" ColumnName="IdSeats" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="HallSessions" TypeName="OnlineCinemaContext.HallSessions" StoreEntitySet="SessionsSet">
+      <EndProperty Name="Hall">
+        <ScalarProperty Name="IdHall" ColumnName="Hall_IdHall" />
+      </EndProperty>
+      <EndProperty Name="Sessions">
+        <ScalarProperty Name="IdSessions" ColumnName="IdSessions" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SessionsTickets" TypeName="OnlineCinemaContext.SessionsTickets" StoreEntitySet="TicketsSet">
+      <EndProperty Name="Sessions">
+        <ScalarProperty Name="IdSessions" ColumnName="Sessions_IdSessions" />
+      </EndProperty>
+      <EndProperty Name="Tickets">
+        <ScalarProperty Name="IdTicket" ColumnName="IdTicket" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

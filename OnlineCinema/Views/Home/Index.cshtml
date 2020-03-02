@@ -1,0 +1,117 @@
+﻿@model OnlineCinema.Models.MovieModel
+@{
+    ViewBag.Title = "Home Page";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 font">
+            <div class="Heading">
+                <span>@Model.Name</span>
+                <span>@Model.Assessment</span>
+                <span class="glyphicon glyphicon-star"></span>
+            </div>
+            <img src="~/Images/@Model.SmallImg" class="Images" />
+            <br />
+            <span class="font-weight-bold">@Model.Duration.ToString(@"h' ч. 'mm") мин</span>
+        </div>
+        <div class="col-md-9 movie">
+            <div class="row hallluxe">
+                <div class="luxe w-10">LUXE</div>
+                @{
+                    foreach (var ticket in Model.Tickets)
+                    {
+                        if (ticket.Sessions.Hall.NameHall == "LUXE")
+                        {
+                            <div class="col">
+                                <a href="" class="btn btn-outline-primary">@ticket.Time.ToString("h':'mm")</a>
+                                <br />
+                                <span class="time">@ticket.Price</span>
+                            </div>
+                        }
+                    }
+                 }
+            </div>
+            <div class="row hallvip2d">
+                <div class="hall2d">VIP2D</div>
+                @{
+                    foreach (var ticket in Model.Tickets)
+                    {
+                        if (ticket.Sessions.Hall.NameHall == "VIP2D")
+                        {
+                            <div class="col">
+                                <a href="" class="btn btn-outline-primary">@ticket.Time.ToString("h':'mm")</a>
+                                <br />
+                                <span class="time">@ticket.Price</span>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            
+            <div class="row hall2d">
+                <div class="vip">2D</div>
+                @{
+                    foreach (var ticket in Model.Tickets)
+                    {
+                        if (ticket.Sessions.Hall.NameHall == "VIP2D")
+                        {
+                            <div class="col">
+                                <a href="" class="btn btn-outline-primary">@ticket.Time.ToString("h':'mm")</a>
+                                <br />
+                                <span class="time">@ticket.Price</span>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+<style>
+    .vip{
+       
+    }
+    .movie{
+
+    }
+    .session {
+            padding: 0px 0px 0px 22px;
+    }
+
+    .Heading {
+    }
+
+    .Images {
+        width: 200px;
+        height: 170px;
+    }
+
+    .font {
+        color: white;
+    }
+
+    .container {
+        background-color: #212226;
+        color: white;
+    }
+
+    .time {
+        font-size: 11px;
+        padding: 20px;
+    }
+
+    .hallluxe {
+        
+    }
+
+    .hallvip2d {
+       
+    }
+    .hall2d{
+         
+    }
+    .luxe{
+        
+    }
+</style>
