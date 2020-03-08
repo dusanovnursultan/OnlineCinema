@@ -29,7 +29,9 @@ namespace OnlineCinema.Controllers
             }
             model.Tickets = new List<Tickets>();
             var session = _db.SessionsSet;
-            
+            var t = new Ticket();
+            var fgh = session.Take(6).ToList();
+            fgh.Take(6).Where(item => item.Tickets);
             foreach (var s in session)
             {
                 foreach (var ticket in s.Tickets)
