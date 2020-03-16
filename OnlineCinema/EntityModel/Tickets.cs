@@ -7,23 +7,20 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OnlineCinema.Data
+namespace OnlineCinema.EntityModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Hall
+    public partial class Tickets
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Hall()
-        {
-            this.Sessions = new HashSet<Sessions>();
-        }
+        public int IdTicket { get; set; }
+        public bool Status { get; set; }
+        public string Row { get; set; }
+        public string Col { get; set; }
+        public bool IsBuy { get; set; }
     
-        public int IdHall { get; set; }
-        public string NameHall { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sessions> Sessions { get; set; }
+        public virtual Sessions Sessions { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

@@ -1,0 +1,40 @@
+﻿@model OnlineCinema.EntityModel.Movie
+<h2>@Model.Name</h2>
+<div>
+    <div class="row">
+        <div class="col-6 img">
+            <img src="~/Content/Images/@Model.BigImg" class="Images" />
+        </div>
+        <div class="col-6 fontDecs">
+            <div>
+                Возраст: @Model.AgeRestriction+
+            </div>
+            <hr />
+            <div>
+                Начало проката: @Model.StartOfRental.ToShortDateString()
+            </div>
+            <hr />
+            <div>
+                Продолжительность: @Model.Duration.ToString(@"h' ч. 'mm")
+            </div>
+            <hr />
+            <p class="decs">
+                @Model.Description
+            </p>
+        </div>
+    </div>
+    @Html.ActionLink("Вернуться назад","Index")
+</div>
+<style>
+    .Images{
+        height: 400px;
+        width: 500px;
+    }
+    .decs{
+        float:left;
+    }
+    .fontDecs{
+        font-size:20px;
+        font-style:normal;
+    }
+</style>

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OnlineCinema.Data
+namespace OnlineCinema.EntityModel
 {
     using System;
     using System.Collections.Generic;
@@ -17,17 +17,15 @@ namespace OnlineCinema.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Sessions()
         {
-            this.Seats = new HashSet<Seats>();
             this.Tickets = new HashSet<Tickets>();
         }
     
         public int IdSessions { get; set; }
         public System.DateTime Data { get; set; }
         public System.TimeSpan Time { get; set; }
+        public int Price { get; set; }
     
         public virtual Movie Movie { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Seats> Seats { get; set; }
         public virtual Hall Hall { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tickets> Tickets { get; set; }

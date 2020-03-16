@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OnlineCinema.Data
+namespace OnlineCinema.EntityModel
 {
     using System;
     using System.Data.Entity;
@@ -25,10 +25,10 @@ namespace OnlineCinema.Data
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Seats> SeatsSet { get; set; }
         public virtual DbSet<Hall> HallSet { get; set; }
         public virtual DbSet<Sessions> SessionsSet { get; set; }
         public virtual DbSet<Movie> MovieSet { get; set; }
         public virtual DbSet<Tickets> TicketsSet { get; set; }
+        public virtual DbSet<Order> OrderSet { get; set; }
     }
 }

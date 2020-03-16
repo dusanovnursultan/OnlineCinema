@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OnlineCinema.Data
+namespace OnlineCinema.EntityModel
 {
     using System;
     using System.Collections.Generic;
@@ -29,7 +29,6 @@ namespace OnlineCinema.Data
         public int Assessment { get; set; }
         public System.DateTime StartOfRental { get; set; }
         public int AgeRestriction { get; set; }
-        public System.DateTime YearOfIssue { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sessions> Sessions { get; set; }

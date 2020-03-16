@@ -7,19 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OnlineCinema.Data
+namespace OnlineCinema.EntityModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Tickets
+    public partial class Order
     {
-        public int IdTicket { get; set; }
-        public System.DateTime Data { get; set; }
-        public System.DateTime Time { get; set; }
-        public bool Status { get; set; }
-        public int Price { get; set; }
+        public int IdOrder { get; set; }
+        public string GuId { get; set; }
     
-        public virtual Sessions Sessions { get; set; }
+        public virtual Tickets Tickets { get; set; }
     }
 }

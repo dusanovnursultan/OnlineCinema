@@ -5,7 +5,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using OnlineCinema.DataManager;
-using OnlineCinema.Data;
+using OnlineCinema.EntityModel;
+using SeatsModels = OnlineCinema.Models.SeatsModels;
+using Newtonsoft.Json;
+using System.Data.Entity;
 
 namespace OnlineCinema.Controllers
 {
@@ -16,30 +19,84 @@ namespace OnlineCinema.Controllers
         public ActionResult Index()
         {
             _db = new OnlineCinemaContextContainer();
-            var gg = Manager.FindListFilmInHole(2);
-            var movie = _db.MovieSet;
-            var model = new MovieModel();
-            foreach (var item in movie)
-            {  
-                model.Name = item.Name;
-                model.Description = item.Description;
-                model.SmallImg = item.SmallImg;
-                model.Assessment = item.Assessment;
-                model.Duration = item.Duration;
-            }
-            model.Tickets = new List<Tickets>();
-            var session = _db.SessionsSet;
-            var t = new Ticket();
-            var fgh = session.Take(6).ToList();
-            fgh.Take(6).Where(item => item.Tickets);
-            foreach (var s in session)
+            var movies = _db.MovieSet;
+            var hall = _db.HallSet.ToList();
+            var listMovies = new PageMovieInfo()
             {
-                foreach (var ticket in s.Tickets)
+                Movie = movies,
+                Hall = hall
+            };   
+            return View(listMovies);
+        }
+        public ActionResult DetailsMovie(int id)
+        {
+            var movie = DataManager.DataManager.FindMovie(id);
+            return View(movie);
+        }
+        public ActionResult Session(int id)
+        {
+            ViewBag.IdSession = id;
+            return View();
+        }
+        [HttpGet]
+        public JsonResult GetTicketOnSession(int id)
+        {
+            var session = DataManager.DataManager.FindSession(id);
+            TicketModels[][] mas = new TicketModels[4][];
+            var list =  DataManager.DataManager.GetTickets(id);
+
+            for (int i = 0; i < mas.Length; i++)
+            {
+                mas[i] = new TicketModels[4];
+                var listRow = list.Where(x => x.Row == i.ToString()).Take(4).ToList();
+                for (int j = 0; j < listRow.Count; j++)
                 {
-                    model.Tickets.Add(ticket);
+                    mas[i][j] = listRow[j];
                 }
             }
+            return Json(new { listTickets = mas }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult GetParametrHall(int id)
+        {
+            var session = DataManager.DataManager.FindSession(id);
+            var hall = session.Hall.NameHall;
+            var movie = session.Movie.Name;
+            var price = session.Price;
+            
+            return Json(new { Movie = movie,Hall = hall,Price = price }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult AddMovie()
+        {
+            var model = new Movie();
             return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddMovie(HttpPostedFileBase smallImage, Movie model, HttpPostedFileBase bigImage)
+        {
+            if (!ModelState.IsValid || smallImage == null && smallImage.ContentLength == 0) return RedirectToAction("Index");
+            string pathToSave = Server.MapPath(@"~/Content/Images");
+            string ext = System.IO.Path.GetExtension(smallImage.FileName);
+            string uniqueName = $"{"smallImage"}{smallImage.FileName}{200}x{170}{ext}";
+            string fileName = System
+                .IO
+                .Path
+                .Combine(pathToSave, uniqueName);
+            smallImage.SaveAs(fileName);
+            model.SmallImg = uniqueName;
+            ext = System.IO.Path.GetExtension(bigImage.FileName);
+            uniqueName = $"{"bigImage"}{smallImage.FileName}{400}x{500}{ext}";
+            fileName = System
+                .IO
+                .Path
+                .Combine(pathToSave, uniqueName);
+            bigImage.SaveAs(fileName);
+            model.BigImg = uniqueName;
+            _db = new OnlineCinemaContextContainer();
+            _db.MovieSet.Add(model);
+            _db.SaveChanges();
+            return View("DetailsMovie",model);
         }
         public ActionResult About()
         {

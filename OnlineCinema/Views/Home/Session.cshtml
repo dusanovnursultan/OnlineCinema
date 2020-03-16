@@ -1,0 +1,173 @@
+﻿
+@{
+    ViewBag.Title = "Hall";
+
+}
+
+<script src="~/Scripts/angular.min.js"></script>
+<script>
+    // 1) инициализация главного модуля
+    var mainApp = angular.module("mainApp", []);
+    //mainApp.value('myValue',
+    // [] - скобки - это параметры для создания модуля
+    // без них - ангуляр будет искать существующий
+
+    // 3) Model данных (MVC)
+    // 4) Контроллер (MVC)
+    var idViewBag = @ViewBag.idSession
+    mainApp.controller("mainController", function ($scope, $http) {
+        // $scope - встроенная переменная ангуляр,
+        // для работы с областью видимости "ПРЕДСТАВЛЕНИЯ"
+
+        $scope.GetTickets = function () {
+            var params = {
+                id: idViewBag
+            };
+            $http.get('/Home/GetTicketOnSession', { params: params }).then(
+                function (successResponse) {
+                    $scope.masTickets = successResponse.data.listTickets;
+                    console.log($scope.masTickets);
+                },
+                function (errorResponse) {
+                    console.log("не прошло");
+                    console.log(errorResponse)
+                }
+            )
+        }
+        $scope.GetName = function () {
+            var params = {
+                id: idViewBag
+            };
+            $http.get('/Home/GetParametrHall', { params: params }).then(
+                function (successResponse) {
+                    console.log(successResponse.data);
+                    $scope.nameMovie = successResponse.data.Movie;
+                    $scope.nameHall = successResponse.data.Hall;
+                    $scope.ticketPrice = successResponse.data.Price;
+                },
+                function (errorResponse) {
+                    console.log("не прошло");
+                    console.log(errorResponse)
+                }
+            )
+        }
+        $scope.GetName();
+        $scope.GetTickets();
+        $scope.choiseSeats = [];
+        $scope.Total = 0;
+        $scope.masTickets = [];
+        $scope.toogle = false;
+        $scope.btnClick = function (e) {
+            console.log(e);
+            console.log($scope.choiseSeats);
+            if (document.getElementById(e.IdTicket).className =="btn btn-outline-primary ng-binding") {
+                document.getElementById(e.IdTicket).className = "btn btn-success";
+                e.Status = "True";
+                $scope.Total += $scope.ticketPrice;
+                $scope.choiseSeats.push(e);
+            }
+            else {
+                $scope.choiseSeats.splice($scope.choiseSeats.indexOf('e'), 1);
+                $scope.Total -= $scope.ticketPrice;
+                document.getElementById(e.IdTicket).className = "btn btn-outline-primary ng-binding";
+                e.Status = "False";
+            }
+        };
+        $scope.btnClickBuy = function ()
+        {
+            $scope.choiseSeats;
+            console.log('готовый массв' + $scope.choiseSeats[0]);
+            var model = [];
+            for (var i = 0; i < $scope.choiseSeats.length; i++) {
+                model[i] = {
+                    IdTicket: $scope.choiseSeats[i].IdTicket,
+                    Status: $scope.choiseSeats[i].Status,
+                    Row: $scope.choiseSeats[i].Row,
+                    Col: $scope.choiseSeats[i].Col
+                };
+            }
+            $http(
+                {
+                    method: 'POST',
+                    url: '/Sales/JsonOrder',
+                    data: model,
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                }).then(function (data) {
+                    if (data.success == true) {
+                        console.log("data sabmitted!");
+                    }
+                    else {
+                        console.log("не прошло");
+                        console.log(data);
+                    }
+                }), function (error) {
+                    console.log(error);
+                };
+
+        }
+    });
+
+
+</script>
+<div ng-controller="mainController">
+    <div class="nameMovie"></div>
+    <h2>
+        <span class="badge badge-secondary">
+            {{nameMovie}}
+            <br />
+            Зал: {{nameHall}}
+        </span>
+    </h2>
+    <div>
+        <div class="row" ng-repeat="item in masTickets">
+            <div class="numberRow ">
+                {{$index+1}}
+            </div>
+            <div class="col-2 seatscol" ng-repeat="cell in item track by cell.IdTicket">
+                <button type="button" id="{{cell.IdTicket}}" class="btn btn-outline-primary" ng-click="btnClick(cell)">
+                    {{cell.Col}}
+                </button>
+
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="alert alert-info">
+        <div class="border-dark shoiceSeats" ng-repeat="item in choiseSeats track by item.IdTicket">
+            Ряд:{{item.Row}} Место {{item.Col}} |
+        </div>
+    </div>
+
+    <div class="alert alert-primary total">
+        Итого: {{Total}} руб.
+    </div>
+    <div class="btnSubmit">
+        <button type="button" class="btn btn-success" ng-click="btnClickBuy()">
+            Купить
+        </button>
+    </div>
+    <div>
+        @Html.ActionLink("Вернуться назад", "Index", "Home")
+    </div>
+</div>
+<style>
+    .total {
+        width: 170px;
+        height: 60px;
+    }
+
+    .shoiceSeats {
+        font-size: 18px;
+        padding: 40px,0,5px,0;
+        display: inline-block;
+    }
+
+    .seatscol {
+        padding:5px;
+    }
+    .numberRow{
+       padding:10px;
+       font-size:20px;
+    }
+</style>

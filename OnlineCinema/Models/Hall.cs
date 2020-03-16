@@ -5,7 +5,7 @@ using System.Web;
 
 namespace OnlineCinema.Models
 {
-    public class Ticket
+    public class Hall
     {
     }
 }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
-using OnlineCinema.Data;
+using OnlineCinema.EntityModel;
 namespace OnlineCinema.Models
 {
     public class PageMovieInfo
     {
-        public List<MovieModel> Movies { get; set; }
-        public  Session Session{ get; set; }
+        public DbSet<Movie> Movie { get; set; }
+        public List<Hall> Hall { get; set; }
     }
 }

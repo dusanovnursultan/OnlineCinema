@@ -18,6 +18,25 @@ namespace OnlineCinema
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(null,
+                "{controller}/Session={page}",
+                // eshop.ru/ExternalHDDs/page=4
+                new
+                {
+                    controller = "Home",
+                    action = "Session"
+                },
+                new { page = @"\d+" });
+            /*
+            routes.MapRoute(null,
+                "{controller}/JsonOrder/{json}",
+                // eshop.ru/ExternalHDDs/page=4
+                new
+                {
+                    controller = "Sales",
+                    action = "JsonOrder",
+                    json = UrlParameter.Optional
+                });*/
         }
     }
 }
